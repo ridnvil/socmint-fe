@@ -41,240 +41,244 @@
               </v-text-field>
             </v-row>
             <v-row justify="left">
-              <h3>
+              <h3 v-if="userexist">
                 Find a Twitter account to see the analitic..!!
+              </h3>
+              <h3 v-else>
+                User Not Found.
               </h3>
             </v-row>
           </v-col>
         </v-row>
-
-        <v-row v-else>
-          <v-col>
-            <v-row justify="right">
-              <v-col cols="11" />
-              <v-col cols="1">
-                <v-icon
-                  dark
-                  color="primary"
-                  @click="resetData"
+        <template v-else>
+          <v-row>
+            <v-col>
+              <v-row justify="right">
+                <v-col cols="11" />
+                <v-col cols="1">
+                  <v-icon
+                    dark
+                    color="primary"
+                    @click="resetData"
+                  >
+                    mdi-close
+                  </v-icon>
+                </v-col>
+              </v-row>
+              <v-row justify="space-around">
+                <v-avatar
+                  color="indigo"
+                  size="100"
                 >
-                  mdi-close
-                </v-icon>
-              </v-col>
-            </v-row>
-            <v-row justify="space-around">
-              <v-avatar
-                color="indigo"
-                size="100"
-              >
-                <img
-                  :src="account.image"
-                  alt="John"
-                >
-              </v-avatar>
-            </v-row>
-            <v-row justify="space-around">
-              <h2>{{ account.username }}</h2>
-            </v-row>
-            <v-row justify="space-around">
-              <h4>
-                <v-icon>mdi-map-marker</v-icon>
-                <a
-                  :href="account.location.url"
-                  target="_blank"
-                >
-                  {{ account.location.name }}
-                </a>
-              </h4>
-            </v-row>
-            <v-row justify="space-around">
-              <h4><v-icon>mdi-cellphone</v-icon> From {{ account.devices }}</h4>
-            </v-row>
-            <v-row justify="space-around">
-              <v-col>
-                <base-material-stats-card
-                  color="primary"
-                  icon="mdi-twitter"
-                  title="Followers"
-                  :value="account.followers.length.toString()"
-                  sub-icon="mdi-clock"
-                  sub-text="Just Updated"
-                />
-              </v-col>
-              <v-col>
-                <base-material-stats-card
-                  color="primary"
-                  icon="mdi-twitter"
-                  title="Following"
-                  :value="account.following.length.toString()"
-                  sub-icon="mdi-clock"
-                  sub-text="Just Updated"
-                />
-              </v-col>
-            </v-row>
+                  <img
+                    :src="account.image"
+                    alt="John"
+                  >
+                </v-avatar>
+              </v-row>
+              <v-row justify="space-around">
+                <h2>{{ account.username }}</h2>
+              </v-row>
+              <v-row justify="space-around">
+                <h4>
+                  <v-icon>mdi-map-marker</v-icon>
+                  <a
+                    :href="account.location.url"
+                    target="_blank"
+                  >
+                    {{ account.location.name }}
+                  </a>
+                </h4>
+              </v-row>
+              <v-row justify="space-around">
+                <h4><v-icon>mdi-cellphone</v-icon> From {{ account.devices }}</h4>
+              </v-row>
+              <v-row justify="space-around">
+                <v-col>
+                  <base-material-stats-card
+                    color="primary"
+                    icon="mdi-twitter"
+                    title="Followers"
+                    :value="account.followers.length.toString()"
+                    sub-icon="mdi-clock"
+                    sub-text="Just Updated"
+                  />
+                </v-col>
+                <v-col>
+                  <base-material-stats-card
+                    color="primary"
+                    icon="mdi-twitter"
+                    title="Following"
+                    :value="account.following.length.toString()"
+                    sub-icon="mdi-clock"
+                    sub-text="Just Updated"
+                  />
+                </v-col>
+              </v-row>
 
-            <v-row justify="space-around">
-              <h4>Popular Hastag#</h4>
-            </v-row>
+              <v-row justify="space-around">
+                <h4>Popular Hastag#</h4>
+              </v-row>
 
-            <v-row>
-              <v-col />
-              <v-card
-                v-for="hastag in userhastag"
-                :key="hastag.tag"
-                class="ma-1 pa-1"
-              >
-                <a :href="hastag.url">{{ hastag.tag }}</a>
+              <v-row>
+                <v-col />
+                <v-card
+                  v-for="hastag in userhastag"
+                  :key="hastag.tag"
+                  class="ma-1 pa-1"
+                >
+                  <a :href="hastag.url">{{ hastag.tag }}</a>
+                </v-card>
+                <v-col />
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <base-material-chart-card
+                    :data="monthlyChart.data"
+                    :options="monthlyChart.options"
+                    :responsive-options="monthlyChart.responsiveOptions"
+                    color="#E91E63"
+                    hover-reveal
+                    type="Line"
+                  >
+                    <template v-slot:reveal-actions>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            v-bind="attrs"
+                            color="info"
+                            icon
+                            v-on="on"
+                          >
+                            <v-icon
+                              color="info"
+                            >
+                              mdi-refresh
+                            </v-icon>
+                          </v-btn>
+                        </template>
+
+                        <span>Refresh</span>
+                      </v-tooltip>
+
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            v-bind="attrs"
+                            light
+                            icon
+                            v-on="on"
+                          >
+                            <v-icon>mdi-pencil</v-icon>
+                          </v-btn>
+                        </template>
+
+                        <span>Change Date</span>
+                      </v-tooltip>
+                    </template>
+
+                    <h4 class="card-title font-weight-light mt-2 ml-2">
+                      Monthly Tweets Statistic
+                    </h4>
+
+                    <p class="d-inline-flex font-weight-light ml-2 mt-1">
+                      Last Tweets By Monthly..
+                    </p>
+
+                    <template v-slot:actions>
+                      <v-icon
+                        class="mr-1"
+                        small
+                      >
+                        mdi-clock-outline
+                      </v-icon>
+                      <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
+                    </template>
+                  </base-material-chart-card>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <base-material-chart-card
+                    :data="weeklyChart.data"
+                    :options="weeklyChart.options"
+                    :responsive-options="weeklyChart.responsiveOptions"
+                    color="#3f51b5"
+                    hover-reveal
+                    type="Bar"
+                  >
+                    <template v-slot:reveal-actions>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            v-bind="attrs"
+                            color="info"
+                            icon
+                            v-on="on"
+                          >
+                            <v-icon
+                              color="info"
+                            >
+                              mdi-refresh
+                            </v-icon>
+                          </v-btn>
+                        </template>
+
+                        <span>Refresh</span>
+                      </v-tooltip>
+
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            v-bind="attrs"
+                            light
+                            icon
+                            v-on="on"
+                          >
+                            <v-icon>mdi-pencil</v-icon>
+                          </v-btn>
+                        </template>
+
+                        <span>Change Date</span>
+                      </v-tooltip>
+                    </template>
+
+                    <h4 class="card-title font-weight-light mt-2 ml-2">
+                      Weekly Tweets Statistic
+                    </h4>
+
+                    <p class="d-inline-flex font-weight-light ml-2 mt-1">
+                      Last Tweets By Weekly..
+                    </p>
+
+                    <template v-slot:actions>
+                      <v-icon
+                        class="mr-1"
+                        small
+                      >
+                        mdi-clock-outline
+                      </v-icon>
+                      <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
+                    </template>
+                  </base-material-chart-card>
+                </v-col>
+              </v-row>
+
+              <v-card>
+                <v-card-title>
+                  Connection
+                </v-card-title>
+                <v-card-text>
+                  <div
+                    id="chart"
+                  />
+                </v-card-text>
               </v-card>
-              <v-col />
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <base-material-chart-card
-                  :data="monthlyChart.data"
-                  :options="monthlyChart.options"
-                  :responsive-options="monthlyChart.responsiveOptions"
-                  color="#E91E63"
-                  hover-reveal
-                  type="Line"
-                >
-                  <template v-slot:reveal-actions>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          v-bind="attrs"
-                          color="info"
-                          icon
-                          v-on="on"
-                        >
-                          <v-icon
-                            color="info"
-                          >
-                            mdi-refresh
-                          </v-icon>
-                        </v-btn>
-                      </template>
-
-                      <span>Refresh</span>
-                    </v-tooltip>
-
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          v-bind="attrs"
-                          light
-                          icon
-                          v-on="on"
-                        >
-                          <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
-                      </template>
-
-                      <span>Change Date</span>
-                    </v-tooltip>
-                  </template>
-
-                  <h4 class="card-title font-weight-light mt-2 ml-2">
-                    Monthly Tweets Statistic
-                  </h4>
-
-                  <p class="d-inline-flex font-weight-light ml-2 mt-1">
-                    Last Tweets By Monthly..
-                  </p>
-
-                  <template v-slot:actions>
-                    <v-icon
-                      class="mr-1"
-                      small
-                    >
-                      mdi-clock-outline
-                    </v-icon>
-                    <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-                  </template>
-                </base-material-chart-card>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <base-material-chart-card
-                  :data="weeklyChart.data"
-                  :options="weeklyChart.options"
-                  :responsive-options="weeklyChart.responsiveOptions"
-                  color="#3f51b5"
-                  hover-reveal
-                  type="Bar"
-                >
-                  <template v-slot:reveal-actions>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          v-bind="attrs"
-                          color="info"
-                          icon
-                          v-on="on"
-                        >
-                          <v-icon
-                            color="info"
-                          >
-                            mdi-refresh
-                          </v-icon>
-                        </v-btn>
-                      </template>
-
-                      <span>Refresh</span>
-                    </v-tooltip>
-
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                          v-bind="attrs"
-                          light
-                          icon
-                          v-on="on"
-                        >
-                          <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
-                      </template>
-
-                      <span>Change Date</span>
-                    </v-tooltip>
-                  </template>
-
-                  <h4 class="card-title font-weight-light mt-2 ml-2">
-                    Weekly Tweets Statistic
-                  </h4>
-
-                  <p class="d-inline-flex font-weight-light ml-2 mt-1">
-                    Last Tweets By Weekly..
-                  </p>
-
-                  <template v-slot:actions>
-                    <v-icon
-                      class="mr-1"
-                      small
-                    >
-                      mdi-clock-outline
-                    </v-icon>
-                    <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-                  </template>
-                </base-material-chart-card>
-              </v-col>
-            </v-row>
-
-            <v-card>
-              <v-card-title>
-                Connection
-              </v-card-title>
-              <v-card-text>
-                <div
-                  id="chart"
-                />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+            </v-col>
+          </v-row>
+        </template>
       </v-col>
     </v-row>
   </v-container>
@@ -305,6 +309,7 @@
       return {
         userid: '',
         userhastag: null,
+        userexist: true,
         account: null,
         loadAccount: dummy,
         value: 100,
@@ -393,10 +398,13 @@
         this.loading = true
         for (let index = 0; index < this.loadAccount.length; index++) {
           if (this.loadAccount[index].username === this.userid) {
+            // this.userexist = true
             this.account = this.loadAccount[index]
             this.monthlyChart.data = this.loadAccount[index].monthlytweet
             this.weeklyChart.data = this.loadAccount[index].weeklytweet
             this.userhastag = this.loadAccount[index].hastag
+          } else {
+            this.userexist = false
           }
         }
       },
@@ -469,6 +477,7 @@
       },
       resetData () {
         this.account = null
+        this.userexist = true
       },
       drag (simulation) {
         var dragstarted = (event) => {
