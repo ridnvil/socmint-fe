@@ -14,33 +14,35 @@
           justify="space-around"
         >
           <v-col
-            class="justify"
             cols="6"
           >
-            <v-text-field
-              v-model="userid"
-              :label="$t('Find by twitter username (e.g @username)')"
-              color="secondary"
-              hide-details
-            >
-              <template
-                v-if="$vuetify.breakpoint.mdAndUp"
-                v-slot:append-outer
-              >
-                <v-btn
-                  class="mt-n2"
-                  elevation="1"
-                  fab
-                  small
-                  @click="initDdata"
-                >
-                  <v-icon>mdi-magnify</v-icon>
-                </v-btn>
-              </template>
-            </v-text-field>
             <v-row justify="space-around">
+              <v-text-field
+                v-model="userid"
+                label="Find by twitter username (e.g @username)"
+                color="secondary"
+                hide-details
+              >
+                <template
+                  v-if="$vuetify.breakpoint.mdAndUp"
+                  v-slot:append-outer
+                >
+                  <v-btn
+                    class="mt-n2"
+                    elevation="1"
+                    color="primary"
+                    fab
+                    small
+                    @click="initDdata"
+                  >
+                    <v-icon>mdi-magnify</v-icon>
+                  </v-btn>
+                </template>
+              </v-text-field>
+            </v-row>
+            <v-row justify="left">
               <h3>
-                The Twitter Account to see the analitic..!
+                Find a Twitter account to see the analitic..!!
               </h3>
             </v-row>
           </v-col>
@@ -64,13 +66,26 @@
               <v-avatar
                 color="indigo"
                 size="100"
-              />
+              >
+                <img
+                  :src="account.image"
+                  alt="John"
+                >
+              </v-avatar>
             </v-row>
             <v-row justify="space-around">
               <h2>{{ account.username }}</h2>
             </v-row>
             <v-row justify="space-around">
-              <h4><v-icon>mdi-map-marker</v-icon><a :href="account.location.url">{{ account.location.name }}</a></h4>
+              <h4>
+                <v-icon>mdi-map-marker</v-icon>
+                <a
+                  :href="account.location.url"
+                  target="_blank"
+                >
+                  {{ account.location.name }}
+                </a>
+              </h4>
             </v-row>
             <v-row justify="space-around">
               <h4><v-icon>mdi-cellphone</v-icon> From {{ account.devices }}</h4>
@@ -393,54 +408,6 @@
         const links = dataset.links.map(d => Object.create(d))
 
         if (show) {
-          // var svg = d3.select('#chart').append('svg')
-          //   .attr('width', width)
-          //   .attr('height', height)
-
-          // var force = d3.layout.force()
-          //   .gravity(0.05)
-          //   .distance(100)
-          //   .charge(-100)
-          //   .size([width, height])
-
-          // d3.json('../../../tweets.json', (dt) => {
-          //   force.nodes(dt.nodes)
-          //     .links(dt.links)
-          //     .start()
-
-          //   var link = svg.selectAll('.link')
-          //     .data(dt.links)
-          //     .enter().append('line')
-          //     .attr('class', 'link')
-
-          //   var node = svg.selectAll('.node')
-          //     .data(dt.nodes)
-          //     .enter().append('g')
-          //     .attr('class', 'node')
-          //     .call(force.drag)
-
-          //   node.append('image')
-          //     .attr('xlink:href', 'https://github.com/favicon.ico')
-          //     .attr('x', -8)
-          //     .attr('y', -8)
-          //     .attr('width', 16)
-          //     .attr('height', 16)
-
-          //   node.append('text')
-          //     .attr('dx', 12)
-          //     .attr('dy', '.35em')
-          //     .text(d => d.id)
-
-          //   force.on('tick', () => {
-          //     link.attr('x1', d => d.source.x)
-          //       .attr('y1', d => d.source.y)
-          //       .attr('x2', d => d.target.x)
-          //       .attr('y2', d => d.target.y)
-
-          //     node.attr('transform', d => 'translate(' + d.x + ', ' + d.y + ')')
-          //   })
-          // })
-
           var simulation = d3.forceSimulation(nodes)
             .force('link', d3.forceLink(links).id(d => d.id))
             .force('charge', d3.forceManyBody())
@@ -465,30 +432,22 @@
             .attr('xlink:href', d => d.image)
             .attr('x', -15)
             .attr('y', -15)
-            .attr('width', 30)
-            .attr('height', 30)
+            .attr('width', 25)
+            .attr('height', 25)
             .attr('class', 'node')
+            .attr('border-radius', '20%')
             .call(this.drag(simulation))
-
-          // node.append('svg:image')
-          //   .attr('xlink:href', 'https://github.com/favicon.ico')
-          //   .attr('width', 16)
-          //   .attr('height', 16)
 
           node.append('title').text(d => d.id)
 
-          node.on('load', action => {
-            action.target.style.borderRadius = '50%'
-          })
-
           node.on('mouseover', action => {
-            action.target.style.width = 40
-            action.target.style.height = 40
+            action.target.style.width = 27
+            action.target.style.height = 27
           })
 
           node.on('mouseout', action => {
-            action.target.style.width = 30
-            action.target.style.height = 30
+            action.target.style.width = 25
+            action.target.style.height = 25
           })
 
           node.on('click', action => {
@@ -501,10 +460,6 @@
               .attr('y1', d => d.source.y)
               .attr('x2', d => d.target.x)
               .attr('y2', d => d.target.y)
-
-            // node
-            //   .attr('cx', d => d.x)
-            //   .attr('cy', d => d.y)
 
             node.attr('transform', d => 'translate(' + d.x + ', ' + d.y + ')')
           })
