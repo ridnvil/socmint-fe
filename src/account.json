@@ -1,0 +1,199 @@
+[
+    {
+        "username": "@ridwan",
+        "realname": "Ridwan",
+        "joined": "Joined March 2020",
+        "image": "",
+        "followers": [
+            {
+                "username": "bambang"
+            },
+            {
+                "username": "jhon"
+            },
+            {
+                "username": "nvil"
+            },
+            {
+                "username": "ayam"
+            },
+            {
+                "username": "sapi"
+            }
+        ],
+        "following": [
+            {
+                "username": "bambang"
+            },
+            {
+                "username": "jhon"
+            },
+            {
+                "username": "nvil"
+            },
+            {
+                "username": "ayam"
+            },
+            {
+                "username": "sapi"
+            }
+        ],
+        "hastag": [
+            {
+                "tag": "#Covid19",
+                "url": "https://twitter.com/search?q=%23COVID19&src=typeahead_click"
+            },
+            {
+                "tag": "#Indonesia",
+                "url": "https://twitter.com/search?q=%23Indonesia&src=typeahead_click"
+            },
+            {
+                "tag": "#Jakarta",
+                "url": "https://twitter.com/search?q=%23Jakarta&src=typeahead_click"
+            },
+            {
+                "tag": "#Makan",
+                "url": "https://twitter.com/search?q=%23Makan&src=typeahead_click"
+            },
+            {
+                "tag": "#Demo",
+                "url": "https://twitter.com/search?q=%23Demo&src=typeahead_click"
+            }
+        ],
+        "location": {
+            "name": "Cengkareng, Jakarta",
+            "url": "https://www.google.co.id/maps/@-6.1628211,106.7269934,16z"
+        },
+        "tweets": {
+            "m_replay": "https://twitter.com/RandallKanna/status/1313888292182482947",
+            "m_retweet": "https://twitter.com/ayushbherwani/status/1314058780963815424/retweets",
+            "m_comment": "https://twitter.com/RandallKanna/status/1313888292182482947"
+        },
+        "devices": "Android",
+        "monthlytweet": {
+            "labels": ["Ja", "Fe", "Ma", "Ap", "Mai", "Ju", "Jul", "Au", "Se", "Oc", "No", "De"],
+            "series": [[700, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+        },
+        "weeklytweet": {
+            "labels": ["M", "T", "W", "T", "F", "S", "S"],
+            "series": [[12, 17, 7, 17, 23, 18, 38]]
+        },
+        "dailytweets": {
+            "labels": ["02am", "03am", "05am", "10am", "02pm", "03pm", "7pm", "10pm"],
+            "series": [[5, 7, 8, 3, 2, 3, 5, 10]]
+        }
+    },
+    {
+        "username": "@ayam",
+        "image": "",
+        "followers": [
+            {
+                "id": "ridwan",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "ayam",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "bambang",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "nvil",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "kelinci",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "kambing",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "kerbau",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            },
+            {
+                "id": "babi",
+                "group": 1,
+                "image": "https://uploads.disquscdn.com/images/dc368ebd907dfb3c40406ed0c842b10023f20651969cbd4bf77e524b3bf29ce7.jpg"
+            }
+        ],
+        "following": [
+            {
+                "source": "bambang",
+                "target": "ridwan",
+                "value": 1
+            },
+            {
+                "source": "nvil",
+                "target": "ridwan",
+                "value": 1
+            },
+            {
+                "source": "ayam",
+                "target": "ridwan",
+                "value": 1
+            },
+            {
+                "source": "ridwan",
+                "target": "ridwan",
+                "value": 1
+            },
+            {
+                "source": "babi",
+                "target": "ridwan",
+                "value": 1
+            }
+        ],
+        "hastag": [
+            {
+                "tag": "#Covid19",
+                "url": ""
+            },
+            {
+                "tag": "#Indonesia",
+                "url": ""
+            },
+            {
+                "tag": "#Jakarta",
+                "url": ""
+            },
+            {
+                "tag": "#Makan",
+                "url": ""
+            }
+        ],
+        "location": {
+            "name": "Cengkareng, Jakarta",
+            "url": "https://www.google.co.id/maps/@-6.1628211,106.7269934,16z"
+        },
+        "tweets": {
+            "m_replay": "https://twitter.com/RandallKanna/status/1313888292182482947",
+            "m_retweet": "https://twitter.com/ayushbherwani/status/1314058780963815424/retweets",
+            "m_comment": "https://twitter.com/RandallKanna/status/1313888292182482947"
+        },
+        "devices": "iPhone 11",
+        "monthlytweet": {
+            "labels": ["Ja", "Fe", "Ma", "Ap", "Mai", "Ju", "Jul", "Au", "Se", "Oc", "No", "De"],
+            "series": [[700, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+        },
+        "weeklytweet": {
+            "labels": ["M", "T", "W", "T", "F", "S", "S"],
+            "details":[12, 17, 7, 17, 23, 18, 38]
+        },
+        "dailytweets": {
+            "labels": ["02am", "03am", "05am", "10am", "02pm", "03pm", "7pm", "10pm"],
+            "details": [5, 7, 8, 3, 2, 3, 5, 10]
+        }
+    }
+]
