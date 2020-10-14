@@ -382,7 +382,6 @@
             this.monthlyChart.data = this.loadAccount[index].monthlytweet
             this.weeklyChart.data = this.loadAccount[index].weeklytweet
             this.userhastag = this.loadAccount[index].hastag
-            console.log(this.monthlyChart)
           }
         }
       },
@@ -405,7 +404,6 @@
           //   .size([width, height])
 
           // d3.json('../../../tweets.json', (dt) => {
-          //   console.log(dt)
           //   force.nodes(dt.nodes)
           //     .links(dt.links)
           //     .start()
@@ -443,8 +441,6 @@
           //   })
           // })
 
-          console.log(nodes)
-          console.log(links)
           var simulation = d3.forceSimulation(nodes)
             .force('link', d3.forceLink(links).id(d => d.id))
             .force('charge', d3.forceManyBody())
@@ -496,7 +492,6 @@
           })
 
           node.on('click', action => {
-            console.log(action)
             window.open('https://twitter.com/' + action.target.textContent, '_blank')
           })
 
@@ -514,12 +509,8 @@
             node.attr('transform', d => 'translate(' + d.x + ', ' + d.y + ')')
           })
         } else {
-          console.log('Chart Remove..')
           d3.selectAll('#chart > *').remove()
         }
-      },
-      follower (event) {
-        console.log(event)
       },
       resetData () {
         this.account = null
