@@ -4,15 +4,44 @@
     fluid
     tag="section"
   >
+    <v-row justify="space-around">
+      <h4 class="ma-5">
+        Twitter Popular Hastag#
+      </h4>
+    </v-row>
+
+    <v-row
+      v-if="hstagloading"
+      justify="center"
+    >
+      <loading />
+    </v-row>
+
+    <v-row
+      v-else
+      justify="center"
+      class="ml-10 mr-10"
+    >
+      <v-card
+        v-for="hastag in allhashtag"
+        :key="hastag.tag"
+        class="ma-1 pa-1"
+      >
+        <a
+          :href="'https://twitter.com/search?q=%23' + hastag.substring(1, 100) + '&src=typeahead_click'"
+          target="_blank"
+        >{{ hastag }}</a>
+      </v-card>
+    </v-row>
     <v-row>
       <v-col
         cols="12"
-        lg="4"
+        lg="6"
       >
         <base-material-chart-card
-          :data="emailsSubscriptionChart.data"
-          :options="emailsSubscriptionChart.options"
-          :responsive-options="emailsSubscriptionChart.responsiveOptions"
+          :data="mostTweetsoftheMonth.data"
+          :options="mostTweetsoftheMonth.options"
+          :responsive-options="mostTweetsoftheMonth.responsiveOptions"
           color="#E91E63"
           hover-reveal
           type="Bar"
@@ -54,7 +83,7 @@
           </template>
 
           <h4 class="card-title font-weight-light mt-2 ml-2">
-            Website Views
+            The Most tweet of the Month
           </h4>
 
           <p class="d-inline-flex font-weight-light ml-2 mt-1">
@@ -75,7 +104,7 @@
 
       <v-col
         cols="12"
-        lg="4"
+        lg="6"
       >
         <base-material-chart-card
           :data="dailySalesChart.data"
@@ -146,213 +175,23 @@
           </template>
         </base-material-chart-card>
       </v-col>
-
-      <v-col
-        cols="12"
-        lg="4"
-      >
-        <base-material-chart-card
-          :data="dataCompletedTasksChart.data"
-          :options="dataCompletedTasksChart.options"
-          hover-reveal
-          color="info"
-          type="Line"
-        >
-          <template v-slot:reveal-actions>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  color="info"
-                  icon
-                  v-on="on"
-                >
-                  <v-icon
-                    color="info"
-                  >
-                    mdi-refresh
-                  </v-icon>
-                </v-btn>
-              </template>
-
-              <span>Refresh</span>
-            </v-tooltip>
-
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  light
-                  icon
-                  v-on="on"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-
-              <span>Change Date</span>
-            </v-tooltip>
-          </template>
-
-          <h3 class="card-title font-weight-light mt-2 ml-2">
-            Completed Tasks
-          </h3>
-
-          <p class="d-inline-flex font-weight-light ml-2 mt-1">
-            Last Last Campaign Performance
-          </p>
-
-          <template v-slot:actions>
-            <v-icon
-              class="mr-1"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
-          </template>
-        </base-material-chart-card>
-      </v-col>
-
-      <!-- <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="orange"
-          icon="mdi-sofa"
-          title="Bookings"
-          value="184"
-          sub-icon="mdi-alert"
-          sub-icon-color="red"
-          sub-text="Get More Space..."
-        />
-      </v-col> -->
-
-      <!-- <v-col
-        cols="12"
-        md="6"
-      >
-        <base-material-card
-          color="warning"
-          class="px-5 py-3"
-        >
-          <template v-slot:heading>
-            <div class="display-2 font-weight-light">
-              Employees Stats
-            </div>
-
-            <div class="subtitle-1 font-weight-light">
-              New employees on 15th September, 2016
-            </div>
-          </template>
-          <v-card-text>
-            <v-data-table
-              :headers="headers"
-              :items="items"
-            />
-          </v-card-text>
-        </base-material-card>
-      </v-col> -->
-
-      <!-- <v-col
-        cols="12"
-        md="6"
-      >
-        <base-material-card class="px-5 py-3">
-          <template v-slot:heading>
-            <v-tabs
-              v-model="tabs"
-              background-color="transparent"
-              slider-color="white"
-            >
-              <span
-                class="subheading font-weight-light mx-3"
-                style="align-self: center"
-              >Tasks:</span>
-              <v-tab class="mr-3">
-                <v-icon class="mr-2">
-                  mdi-bug
-                </v-icon>
-                Bugs
-              </v-tab>
-              <v-tab class="mr-3">
-                <v-icon class="mr-2">
-                  mdi-code-tags
-                </v-icon>
-                Website
-              </v-tab>
-              <v-tab>
-                <v-icon class="mr-2">
-                  mdi-cloud
-                </v-icon>
-                Server
-              </v-tab>
-            </v-tabs>
-          </template>
-
-          <v-tabs-items
-            v-model="tabs"
-            class="transparent"
-          >
-            <v-tab-item
-              v-for="n in 3"
-              :key="n"
-            >
-              <v-card-text>
-                <template v-for="(task, i) in tasks[tabs]">
-                  <v-row
-                    :key="i"
-                    align="center"
-                  >
-                    <v-col cols="1">
-                      <v-list-item-action>
-                        <v-checkbox
-                          v-model="task.value"
-                          color="secondary"
-                        />
-                      </v-list-item-action>
-                    </v-col>
-
-                    <v-col cols="9">
-                      <div
-                        class="font-weight-light"
-                        v-text="task.text"
-                      />
-                    </v-col>
-
-                    <v-col
-                      cols="2"
-                      class="text-right"
-                    >
-                      <v-icon class="mx-1">
-                        mdi-pencil
-                      </v-icon>
-                      <v-icon
-                        color="error"
-                        class="mx-1"
-                      >
-                        mdi-close
-                      </v-icon>
-                    </v-col>
-                  </v-row>
-                </template>
-              </v-card-text>
-            </v-tab-item>
-          </v-tabs-items>
-        </base-material-card>
-      </v-col> -->
     </v-row>
   </v-container>
 </template>
 
 <script>
+  import axios from 'axios'
+
   export default {
     name: 'DashboardDashboard',
-
+    components: {
+      Loading: () => import('../dashboard/component/Loading'),
+    },
     data () {
       return {
+        popularHastag: '#',
+        hstagloading: false,
+        allhashtag: [],
         dailySalesChart: {
           data: {
             labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
@@ -395,11 +234,11 @@
             },
           },
         },
-        emailsSubscriptionChart: {
+        mostTweetsoftheMonth: {
           data: {
-            labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             series: [
-              [700, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 
             ],
           },
@@ -546,10 +385,54 @@
         },
       }
     },
-
+    created () {
+      this.hstagloading = true
+      this.getAllData()
+    },
     methods: {
       complete (index) {
         this.list[index] = !this.list[index]
+      },
+      async getAllData () {
+        var date = new Date()
+
+        console.log(date.getFullYear())
+        await axios.post('http://localhost:8080/medsos/set', {
+          type: 'twitter',
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .catch(err => console.log(err))
+          .then(res => {
+            var response = res.data.data
+            var hstag = []
+            this.mostTweetsoftheMonth.data.labels.forEach(month => {
+              var count = []
+              response.forEach(element => {
+                if (month === element.tanggal.split(' ')[3]) {
+                  count.push(element)
+                  this.mostTweetsoftheMonth.data.series[0][this.mostTweetsoftheMonth.data.labels.indexOf(month)] = count.length
+                }
+                hstag.push(element.hashtag)
+              })
+            })
+
+            this.allhashtag = this.getUnique(hstag)
+            this.mostTweetsoftheMonth.options.high = response.length + 200
+            this.hstagloading = false
+          })
+      },
+      getUnique (array) {
+        var uniqueArray = []
+        // Loop through array values
+        for (var value of array) {
+          if (uniqueArray.indexOf(value) === -1) {
+            uniqueArray.push(value)
+          }
+        }
+        return uniqueArray
       },
     },
   }

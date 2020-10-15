@@ -289,6 +289,8 @@
   import dummy from '../../../dummy'
   // import * as d3 from 'd3'
   import dataset from '../../../tweets.json'
+  import axios from 'axios'
+
   const d3 = require('d3')
 
   export default {
@@ -386,6 +388,9 @@
         },
       },
     },
+    created () {
+      axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://anjay.infosec.my.id'
+    },
     methods: {
       async initDdata () {
         await this.initChart(false)
@@ -394,8 +399,53 @@
         this.userid = ''
         // this.open = false
       },
+      async getAllHastag (valHastag) {
+        await axios.post('http://localhost:8080/medsos/set', {
+          type: 'twitter',
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .catch(err => console.log(err))
+          .then(res => {
+            var response = res.data.data
+
+            response.forEach(element => {
+              // console.log(element)
+              if (element.hashtag === valHastag) {
+                console.log(element)
+              }
+            })
+            // console.log(res.data.data)
+          })
+      },
+      async getDataUser (username) {
+        await axios.post('http://localhost:8080/medsos/set', {
+          type: 'twitter@' + username,
+          where: "username='" + username + "'",
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .catch(err => console.log(err))
+          .then(res => {
+            var response = res.data.data
+
+            response.forEach(element => {
+              console.log(element)
+            })
+          })
+      },
       getData () {
         this.loading = true
+        if (this.userid.includes('@')) {
+          this.getDataUser(this.userid)
+        } else {
+          this.getAllHastag('#LindseyHasCovid')
+        }
+
         for (let index = 0; index < this.loadAccount.length; index++) {
           if (this.loadAccount[index].username === this.userid) {
             // this.userexist = true
@@ -443,7 +493,6 @@
             .attr('width', 25)
             .attr('height', 25)
             .attr('class', 'node')
-            .attr('border-radius', '20%')
             .call(this.drag(simulation))
 
           node.append('title').text(d => d.id)

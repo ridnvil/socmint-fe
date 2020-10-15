@@ -13,6 +13,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "core-js": "^3.6.2",
     "csvtojson": "^2.0.10",
     "d3": "^6.2.0",

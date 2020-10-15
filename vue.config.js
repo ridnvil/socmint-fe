@@ -2,6 +2,7 @@ module.exports = {
   publicPath: '',
   devServer: {
     disableHostCheck: true,
+    proxy: 'https://anjay.infosec.my.id',
   },
 
   transpileDependencies: ['vuetify'],
