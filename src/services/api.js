@@ -5,12 +5,12 @@ export default ({
         async getDatabyHastag (hastag) {
             var data = []
             await axios.post('http://localhost:8080/medsos/set', {
-          type: 'twitter',
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+            type: 'twitter',
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
           .catch(err => console.log(err))
           .then(res => {
             var response = res.data.data
@@ -21,6 +21,15 @@ export default ({
             })
           })
           return data
+        },
+        async getallData () {
+          return await axios.post('http://localhost:8080/medsos/set', {
+            type: 'twitter',
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }).then(res => res.data.data)
         },
     },
 })

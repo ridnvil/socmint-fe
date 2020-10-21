@@ -11,7 +11,13 @@
     </v-avatar>
     <div class="mt-1">
       <p class="ma-0">
-        <span>{{ user.username }}</span>
+        <a
+          :href="userlink+user.username.replace('@', '')"
+          target="_blank"
+          style="text-decoration:none;"
+        >
+          <span>{{ user.username }}</span>
+        </a>
       </p>
       <p class="ma-0">
         <span>{{ user.name }}</span>
@@ -38,6 +44,7 @@
     data () {
       return {
         user: {},
+        userlink: 'https://twitter.com/',
       }
     },
     created () {
