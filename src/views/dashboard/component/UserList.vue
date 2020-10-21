@@ -42,7 +42,6 @@
     },
     created () {
       this.user = this.usertweet
-      console.log(this.user)
     },
   }
 </script>

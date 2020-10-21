@@ -513,13 +513,10 @@
             j = Math.max(10)
             var tempdatalagi = []
             for (var i = 0; i < j; i++) {
-              console.log(tempdata[i])
               tempdatalagi.push(tempdata[i])
             }
 
             this.datausertweet = tempdatalagi
-
-            console.log(this.datausertweett)
             this.loading = false
           })
       },
