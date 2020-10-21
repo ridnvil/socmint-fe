@@ -1,7 +1,6 @@
 <template>
   <v-progress-circular
     :active="loading"
-    :aria-hidden="loading"
     color="primary"
     :indeterminate="true"
     :size="50"
@@ -10,6 +9,10 @@
 
 <script>
   export default {
-
+    data () {
+      return {
+        loading: false,
+      }
+    },
   }
 </script>

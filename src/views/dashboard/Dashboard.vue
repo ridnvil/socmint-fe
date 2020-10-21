@@ -36,7 +36,7 @@
     <v-row>
       <v-col
         cols="12"
-        lg="6"
+        lg="12"
       >
         <base-material-chart-card
           :data="mostTweetsoftheMonth.data"
@@ -87,7 +87,10 @@
           </h4>
 
           <p class="d-inline-flex font-weight-light ml-2 mt-1">
-            Last Campaign Performance
+            Total Tweet {{ datatwitter.length }}
+          </p>
+          <p class="d-inline-flex font-weight-light ml-2 mt-1">
+            & Total Hastag {{ databyhashtag.length }}
           </p>
 
           <template v-slot:actions>
@@ -106,74 +109,88 @@
         cols="12"
         lg="6"
       >
-        <base-material-chart-card
-          :data="dailySalesChart.data"
-          :options="dailySalesChart.options"
-          color="success"
-          hover-reveal
-          type="Line"
-        >
-          <template v-slot:reveal-actions>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  color="info"
-                  icon
-                  v-on="on"
+        <v-card>
+          <v-row justify="center">
+            <h3 class="ma-5">
+              Top Hastag with more then 50 tweets
+            </h3>
+          </v-row>
+
+          <v-row
+            v-if="hstagloading"
+            justify="center"
+          >
+            <loading class="ma-5" />
+          </v-row>
+          <v-row
+            v-else
+            justify="left"
+          >
+            <v-col
+              cols="4"
+            >
+              <v-card
+                v-for="hastagcount in hastagcounttweet"
+                :key="hastagcount.key"
+                class="ma-5"
+                elevation="3"
+              >
+                <h4
+                  class="ml-3 mr-3 mt-5"
                 >
-                  <v-icon
-                    color="info"
+                  <a @click="getHastagData">{{ hastagcount.hastag }}</a>
+                </h4>
+                <p class="ml-3 mr-3 mb-3">
+                  Total Tweets: {{ hastagcount.counttweet }}
+                </p>
+                <p class="ml-3 mr-3 mb-3">
+                  <a
+                    :href="'https://twitter.com/search?q=%23' + hastagcount.hastag.substring(1, 100) + '&src=typeahead_click'"
+                    target="_blank"
+                    style="text-decoration:none;"
                   >
-                    mdi-refresh
-                  </v-icon>
-                </v-btn>
-              </template>
+                    View on Twitter
+                  </a>
+                </p>
+              </v-card>
+            </v-col>
 
-              <span>Refresh</span>
-            </v-tooltip>
+            <v-col
+              cols="8"
+            >
+              <v-row
+                v-if="datatweetlistbyhastag.length == 0"
+                justify="center"
+              >
+                <p>Top 10 User on Hastag</p>
+              </v-row>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  light
-                  icon
-                  v-on="on"
+              <v-row
+                v-else
+                class="mr-5 mt-5"
+              >
+                <v-row
+                  v-if="loading"
                 >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-
-              <span>Change Date</span>
-            </v-tooltip>
-          </template>
-
-          <h4 class="card-title font-weight-light mt-2 ml-2">
-            Daily Sales
-          </h4>
-
-          <p class="d-inline-flex font-weight-light ml-2 mt-1">
-            <v-icon
-              color="green"
-              small
-            >
-              mdi-arrow-up
-            </v-icon>
-            <span class="green--text">55%</span>&nbsp;
-            increase in today's sales
-          </p>
-
-          <template v-slot:actions>
-            <v-icon
-              class="mr-1"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
-          </template>
-        </base-material-chart-card>
+                  <loading />
+                </v-row>
+                <v-row
+                  v-else
+                  justify="space-around"
+                >
+                  <v-col>
+                    <div
+                      v-for="user in datausertweet"
+                      :key="user.key"
+                    >
+                      <user-list :usertweet="user" />
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -181,14 +198,26 @@
 
 <script>
   import axios from 'axios'
+  import Loading from '../dashboard/component/Loading'
+  // import TableUser from '../dashboard/component/TableUser'
+  import UserList from '../dashboard/component/UserList'
+  import api from '../../services/api'
 
   export default {
     name: 'DashboardDashboard',
     components: {
-      Loading: () => import('../dashboard/component/Loading'),
+      Loading,
+      UserList,
     },
     data () {
       return {
+        datatweetlistbyhastag: [],
+        datausertweet: [],
+        loading: false,
+        datatwitter: [],
+        databyhashtag: [],
+        toptenhastag: [],
+        hastagcounttweet: [],
         popularHastag: '#',
         hstagloading: false,
         allhashtag: [],
@@ -385,18 +414,18 @@
         },
       }
     },
-    created () {
+    async created () {
       this.hstagloading = true
-      this.getAllData()
+      await this.getAllData()
+      this.databyhashtag = await this.getByHastag()
+      this.hastagcounttweet = await this.countTweetbyTag()
     },
     methods: {
       complete (index) {
         this.list[index] = !this.list[index]
       },
       async getAllData () {
-        var date = new Date()
-
-        console.log(date.getFullYear())
+        // var date = new Date()
         await axios.post('http://localhost:8080/medsos/set', {
           type: 'twitter',
         }, {
@@ -407,6 +436,7 @@
           .catch(err => console.log(err))
           .then(res => {
             var response = res.data.data
+            this.datatwitter = response
             var hstag = []
             this.mostTweetsoftheMonth.data.labels.forEach(month => {
               var count = []
@@ -424,9 +454,77 @@
             this.hstagloading = false
           })
       },
+      getByHastag () {
+        var response = this.datatwitter
+        var hstag = []
+        var renewdata = []
+        response.forEach(tweet => {
+          hstag.push(tweet.hashtag)
+        })
+        hstag = this.getUnique(hstag)
+        hstag.forEach(ht => {
+          var data = {
+            hastag: ht,
+            tweets: [],
+          }
+
+          response.forEach(tweet => {
+            if (ht === tweet.hashtag) {
+              data.tweets.push(tweet)
+            }
+          })
+
+          renewdata.push(data)
+        })
+        return renewdata
+      },
+      countTweetbyTag () {
+        var counttweetbytag = []
+        this.getByHastag().forEach(tweet => {
+          var data = {
+            hastag: tweet.hastag,
+            counttweet: tweet.tweets.length,
+          }
+          if (tweet.tweets.length > 50) {
+            counttweetbytag.push(data)
+          }
+        })
+        return counttweetbytag
+      },
+      async getHastagData (event) {
+        this.loading = true
+        // this.datatweetlistbyhastag = await api.methods.getDatabyHastag(event.target.innerHTML)
+        await api.methods.getDatabyHastag(event.target.innerHTML)
+          .then(res => {
+            this.datatweetlistbyhastag = res
+            var tempdata = []
+
+            res.forEach(user => {
+              var data = {
+                name: user.name,
+                username: user.username,
+                url: user.url,
+              }
+              this.datausertweet = null
+              tempdata.push(data)
+            })
+
+            var j = tempdata.length
+            j = Math.max(10)
+            var tempdatalagi = []
+            for (var i = 0; i < j; i++) {
+              console.log(tempdata[i])
+              tempdatalagi.push(tempdata[i])
+            }
+
+            this.datausertweet = tempdatalagi
+
+            console.log(this.datausertweett)
+            this.loading = false
+          })
+      },
       getUnique (array) {
         var uniqueArray = []
-        // Loop through array values
         for (var value of array) {
           if (uniqueArray.indexOf(value) === -1) {
             uniqueArray.push(value)
@@ -437,3 +535,6 @@
     },
   }
 </script>
+<style>
+
+</style>

@@ -10,16 +10,25 @@
         md="8"
       >
         <v-row
-          v-if="account==null"
+          v-if="accounttwitter==null && hastagdata==null"
           justify="space-around"
         >
           <v-col
             cols="6"
           >
-            <v-row justify="space-around">
+            <v-row
+              v-if="loading"
+              justify="center"
+            >
+              <loading />
+            </v-row>
+            <v-row
+              v-else
+              justify="space-around"
+            >
               <v-text-field
                 v-model="userid"
-                label="Find by twitter username (e.g @username)"
+                label="Find with (e.g @username/#hastag)"
                 color="secondary"
                 hide-details
               >
@@ -40,17 +49,28 @@
                 </template>
               </v-text-field>
             </v-row>
-            <v-row justify="left">
-              <h3 v-if="userexist">
-                Find a Twitter account to see the analitic..!!
+            <v-row
+              v-if="!loading"
+              justify="left"
+            >
+              <h3 v-if="!notfounddata">
+                Find a content to see the analitic..!!
               </h3>
               <h3 v-else>
-                User Not Found.
+                Not Found.
               </h3>
+            </v-row>
+
+            <v-row
+              v-else
+              justify="center"
+            >
+              Please wait..
             </v-row>
           </v-col>
         </v-row>
-        <template v-else>
+
+        <template v-else-if="accounttwitter!=null">
           <v-row>
             <v-col>
               <v-row justify="right">
@@ -71,213 +91,43 @@
                   size="100"
                 >
                   <img
-                    :src="account.image"
                     alt="John"
                   >
                 </v-avatar>
               </v-row>
               <v-row justify="space-around">
-                <h2>{{ account.username }}</h2>
+                <h2>{{ accounttwitter.account.username }}</h2>
               </v-row>
               <v-row justify="space-around">
-                <h4>
-                  <v-icon>mdi-map-marker</v-icon>
-                  <a
-                    :href="account.location.url"
-                    target="_blank"
-                  >
-                    {{ account.location.name }}
-                  </a>
-                </h4>
-              </v-row>
-              <v-row justify="space-around">
-                <h4><v-icon>mdi-cellphone</v-icon> From {{ account.devices }}</h4>
-              </v-row>
-              <v-row justify="space-around">
-                <v-col>
-                  <base-material-stats-card
-                    color="primary"
-                    icon="mdi-twitter"
-                    title="Followers"
-                    :value="account.followers.length.toString()"
-                    sub-icon="mdi-clock"
-                    sub-text="Just Updated"
-                  />
-                </v-col>
-                <v-col>
-                  <base-material-stats-card
-                    color="primary"
-                    icon="mdi-twitter"
-                    title="Following"
-                    :value="account.following.length.toString()"
-                    sub-icon="mdi-clock"
-                    sub-text="Just Updated"
-                  />
-                </v-col>
+                <h3>{{ accounttwitter.account.name }}</h3>
               </v-row>
 
               <v-row justify="space-around">
-                <h4>Popular Hastag#</h4>
+                <h4><v-icon>mdi-cellphone</v-icon> From {{ accounttwitter.account.device }}</h4>
               </v-row>
 
-              <v-row>
-                <v-col />
-                <v-card
-                  v-for="hastag in userhastag"
-                  :key="hastag.tag"
-                  class="ma-1 pa-1"
-                >
-                  <a :href="hastag.url">{{ hastag.tag }}</a>
-                </v-card>
-                <v-col />
+              <v-row
+                class="mt-10"
+                justify="space-around"
+              >
+                <h4>{{ accounttwitter.account.name }} Tweets</h4>
               </v-row>
 
-              <v-row>
-                <v-col>
-                  <base-material-chart-card
-                    :data="monthlyChart.data"
-                    :options="monthlyChart.options"
-                    :responsive-options="monthlyChart.responsiveOptions"
-                    color="#E91E63"
-                    hover-reveal
-                    type="Line"
-                  >
-                    <template v-slot:reveal-actions>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            v-bind="attrs"
-                            color="info"
-                            icon
-                            v-on="on"
-                          >
-                            <v-icon
-                              color="info"
-                            >
-                              mdi-refresh
-                            </v-icon>
-                          </v-btn>
-                        </template>
-
-                        <span>Refresh</span>
-                      </v-tooltip>
-
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            v-bind="attrs"
-                            light
-                            icon
-                            v-on="on"
-                          >
-                            <v-icon>mdi-pencil</v-icon>
-                          </v-btn>
-                        </template>
-
-                        <span>Change Date</span>
-                      </v-tooltip>
-                    </template>
-
-                    <h4 class="card-title font-weight-light mt-2 ml-2">
-                      Monthly Tweets Statistic
-                    </h4>
-
-                    <p class="d-inline-flex font-weight-light ml-2 mt-1">
-                      Last Tweets By Monthly..
-                    </p>
-
-                    <template v-slot:actions>
-                      <v-icon
-                        class="mr-1"
-                        small
-                      >
-                        mdi-clock-outline
-                      </v-icon>
-                      <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-                    </template>
-                  </base-material-chart-card>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col>
-                  <base-material-chart-card
-                    :data="weeklyChart.data"
-                    :options="weeklyChart.options"
-                    :responsive-options="weeklyChart.responsiveOptions"
-                    color="#3f51b5"
-                    hover-reveal
-                    type="Bar"
-                  >
-                    <template v-slot:reveal-actions>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            v-bind="attrs"
-                            color="info"
-                            icon
-                            v-on="on"
-                          >
-                            <v-icon
-                              color="info"
-                            >
-                              mdi-refresh
-                            </v-icon>
-                          </v-btn>
-                        </template>
-
-                        <span>Refresh</span>
-                      </v-tooltip>
-
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            v-bind="attrs"
-                            light
-                            icon
-                            v-on="on"
-                          >
-                            <v-icon>mdi-pencil</v-icon>
-                          </v-btn>
-                        </template>
-
-                        <span>Change Date</span>
-                      </v-tooltip>
-                    </template>
-
-                    <h4 class="card-title font-weight-light mt-2 ml-2">
-                      Weekly Tweets Statistic
-                    </h4>
-
-                    <p class="d-inline-flex font-weight-light ml-2 mt-1">
-                      Last Tweets By Weekly..
-                    </p>
-
-                    <template v-slot:actions>
-                      <v-icon
-                        class="mr-1"
-                        small
-                      >
-                        mdi-clock-outline
-                      </v-icon>
-                      <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-                    </template>
-                  </base-material-chart-card>
-                </v-col>
-              </v-row>
-
-              <v-card>
-                <v-card-title>
-                  Connection
-                </v-card-title>
-                <v-card-text>
-                  <div
-                    id="chart"
-                  />
-                </v-card-text>
-              </v-card>
+              <div
+                v-for="tweet in accounttwitter.tweets"
+                :key="tweet.key"
+              >
+                <card-tweets :tweet="tweet" />
+              </div>
             </v-col>
           </v-row>
+        </template>
+
+        <template v-else-if="hastagdata!=null">
+          {{ hastagdata }}
+        </template>
+        <template v-else>
+          Not Found..
         </template>
       </v-col>
     </v-row>
@@ -286,7 +136,6 @@
 
 <script>
   import { mapState } from 'vuex'
-  import dummy from '../../../dummy'
   // import * as d3 from 'd3'
   import dataset from '../../../tweets.json'
   import axios from 'axios'
@@ -297,7 +146,8 @@
     name: 'TwitterPage',
 
     components: {
-      // Loading: () => import('../component/Loading'),
+      Loading: () => import('../component/Loading'),
+      CardTweets: () => import('../component/CardTweets'),
     },
 
     props: {
@@ -311,9 +161,9 @@
       return {
         userid: '',
         userhastag: null,
-        userexist: true,
-        account: null,
-        loadAccount: dummy,
+        notfounddata: false,
+        accounttwitter: null,
+        hastagdata: null,
         value: 100,
         loading: false,
         connection: false,
@@ -389,10 +239,11 @@
       },
     },
     created () {
-      axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://anjay.infosec.my.id'
+
     },
     methods: {
       async initDdata () {
+        this.loading = true
         await this.initChart(false)
         await this.getData()
         await this.initChart(this.open)
@@ -400,6 +251,7 @@
         // this.open = false
       },
       async getAllHastag (valHastag) {
+        var hstag = []
         await axios.post('http://localhost:8080/medsos/set', {
           type: 'twitter',
         }, {
@@ -411,18 +263,20 @@
           .then(res => {
             var response = res.data.data
 
-            response.forEach(element => {
-              // console.log(element)
-              if (element.hashtag === valHastag) {
-                console.log(element)
+            response.forEach(tweet => {
+              // console.log(tweet)
+              if (tweet.hashtag === valHastag) {
+                hstag.push(tweet)
               }
             })
-            // console.log(res.data.data)
+            this.loading = false
           })
+        return hstag
       },
       async getDataUser (username) {
+        var user
         await axios.post('http://localhost:8080/medsos/set', {
-          type: 'twitter@' + username,
+          type: 'twitter' + username,
           where: "username='" + username + "'",
         }, {
           headers: {
@@ -432,30 +286,38 @@
           .catch(err => console.log(err))
           .then(res => {
             var response = res.data.data
-
-            response.forEach(element => {
-              console.log(element)
-            })
+            if (response != null) {
+              user = {
+                account: {},
+                tweets: [],
+              }
+              response.forEach(tweet => {
+                if (username === tweet.username) {
+                  user.account = {
+                    username: tweet.username,
+                    device: tweet.device,
+                    name: tweet.name,
+                  }
+                  user.tweets.push(tweet)
+                  this.loading = false
+                }
+              })
+            }
           })
+        return user
       },
-      getData () {
+      async getData () {
         this.loading = true
         if (this.userid.includes('@')) {
-          this.getDataUser(this.userid)
+          this.accounttwitter = await this.getDataUser(this.userid)
+          console.log(this.accounttwitter)
+        } else if (this.userid.includes('#')) {
+          this.hastagdata = await this.getAllHastag(this.userid)
+          console.log(this.hastagdata)
         } else {
-          this.getAllHastag('#LindseyHasCovid')
-        }
-
-        for (let index = 0; index < this.loadAccount.length; index++) {
-          if (this.loadAccount[index].username === this.userid) {
-            // this.userexist = true
-            this.account = this.loadAccount[index]
-            this.monthlyChart.data = this.loadAccount[index].monthlytweet
-            this.weeklyChart.data = this.loadAccount[index].weeklytweet
-            this.userhastag = this.loadAccount[index].hastag
-          } else {
-            this.userexist = false
-          }
+          this.notfounddata = true
+          this.loading = false
+          console.log('Incorrect Value')
         }
       },
       initChart (show) {
@@ -525,8 +387,10 @@
         }
       },
       resetData () {
-        this.account = null
+        this.hastagdata = null
+        this.accounttwitter = null
         this.userexist = true
+        this.loading = false
       },
       drag (simulation) {
         var dragstarted = (event) => {
